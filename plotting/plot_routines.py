@@ -718,26 +718,26 @@ def plot_scatter(ax,data,model,var=dict(),color='k',marker = None,nn=None, title
     
     min1 = var['vmin']
     max1 = var['vmax']
-    line=[min1,max1]                
-    ax.plot   (line,line,'k' ,linewidth=0.2)
+    line = [min1,max1]                
+    ax.plot(line,line,'k' ,linewidth=0.2)
 
 
     if marker is None:
         marker='.'
     else:
         marker = marker
-    scat = ax.scatter(model,data,edgecolor='none', alpha=0.7,c=color,marker=marker)
-    ax.set_ylabel('Data')
-    ax.set_xlabel('Model')
+    scat = ax.scatter(data,model,edgecolor='none', alpha=0.7,c=color,marker=marker)
+    ax.set_ylabel('Model')
+    ax.set_xlabel('Data')
     ax.set_xlim(min1,max1)
     ax.set_ylim(min1,max1)
     ax.set_aspect(1)    
 
-    fit    = np.polyfit(model,data,1)
+    fit    = np.polyfit(data,model,1)
     fit_fn = np.poly1d(fit) # fit_fn is now a function which takes in x and returns an estimate for y
-    ax.plot(model, fit_fn(model),c=color,lw=1 ,alpha=1.0)
+    ax.plot(data, fit_fn(data),c=color,lw=1 ,alpha=1.0)
     
-    ddt =  max1-min1
+    ddt = max1-min1
     
     if nn is not None:
         txt = '(' + ps.ordinal[nn]
@@ -747,15 +747,14 @@ def plot_scatter(ax,data,model,var=dict(),color='k',marker = None,nn=None, title
         ax.text (max1 - 0.95 * ddt ,var['vmax']+ 0.05 * (var['vmax']-var['vmin']) , txt, fontsize=9)
 
     stat = statatistics(data,model)
-    txt = 'RMSE='+"%3.3f"    % stat['rmse'] +\
-          '\nbias='+"%3.3f"  % stat['bias'] +\
-          '\nR2='+"%3.3f"    % stat['r2']+\
-          '\nskill='+"%3.3f" % stat['skill'] +\
-          '\nRB='+"%3.3f"    % stat['rbias'] +\
-          '\nIA='+"%3.3f"    % stat['ia'] +\
-          '\nN='+"%3i"       % len(model)
+    txt = 'RMSE='+"%3.3f"     % stat['rmse'] + ' [m]' +\
+          '\nMAE='+"%3.3f"    % stat['mae']  + ' [m]' +\
+          '\nbias='+"%3.3f"   % stat['bias'] + ' [m]' +\
+          '\ncorr='+"%3.3f"   % stat['cor']+\
+          '\nskill='+"%3.3f"  % stat['skill'] +\
+          '\nN='+"%3i"        % len(model)
 
-    ax.text (min1 + 0.05 * ddt ,var['vmax'] - 0.35 * (var['vmax']-var['vmin']) , txt , fontsize=7)
+    ax.text (min1 + 0.05 * ddt ,var['vmax'] - 0.05 * (var['vmax']-var['vmin']), txt , fontsize=7, va='top')
     print (var['label'])    
 
     # the linewidth of the rectangular axis frame

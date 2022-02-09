@@ -153,12 +153,14 @@ def fort14_to_nc(fort14,**kwargs):
     nc.createVariable('nbdv','i4','neta')
     nc.variables['nbdv'].long_name = 'node numbers on each elevation specified boundary segment'
     nc.variables['nbdv'].units = 'nondimensional'
-    nc.variables['nbdv'][:] = np.int32(np.hstack(grid['nbdv']))
+    nbdv = np.int32(np.hstack(grid['nbdv']))
+    nc.variables['nbdv'][0:len(nbdv)] = nbdv
     
     nc.createVariable('nbvv','i4','nvel')
     nc.variables['nbvv'].long_name = 'node numbers on normal flow boundary segment'
     nc.variables['nbvv'].units = 'nondimensional'
-    nc.variables['nbvv'][:] = np.int32(np.hstack(grid['nbvv']))
+    nbvv = np.int32(np.hstack(grid['nbvv']))
+    nc.variables['nbvv'][0:len(nbvv)] = nbvv
     
     nc.createVariable('depth','f8','node')
     nc.variables['depth'].long_name = 'distance below geoid'
